@@ -1,9 +1,11 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .models import Cook, DishType, Dish
 from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm
 
@@ -131,6 +133,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
 class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
     model = DishType
     fields = "__all__"
+    template_name = "kitchen/dish_type_form.html"
     success_url = reverse_lazy("kitchen:dish_type-list")
 
 
@@ -143,3 +146,12 @@ class DishTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
 class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = DishType
     success_url = reverse_lazy("kitchen:dish_type-list")
+
+@login_required
+def toggle_dish_assign(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
+    if request.user in dish.cooks.all():
+        dish.cooks.remove(request.user)
+    else:
+        dish.cooks.add(request.user)
+    return redirect(reverse("kitchen:dish-detail", args=[pk]))

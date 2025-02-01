@@ -13,9 +13,9 @@
       <input class="btn btn-secondary" type="submit" value="🔍">
     </form>
 
-  {% if car_list %}
+  {% if dish_list %}
     <ul>
-      {% for car in car_list %}
+      {% for dish in dish_list %}
         <li>
           <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">{{ dish.id }}</a>
           {{ dish.name }} ({{ dish.dish_type.name }})
@@ -23,6 +23,6 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>There are no cars in taxi</p>
+    <p>There are no dish in menu</p>
   {% endif %}
 {% endblock %}
