@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Cook, DishType, Dish
-from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm,
+from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm
 
 
 def index(request):
@@ -143,5 +143,3 @@ class DishTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
 class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = DishType
     success_url = reverse_lazy("kitchen:dish_type-list")
-
-

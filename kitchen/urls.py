@@ -42,5 +42,3 @@ urlpatterns = [
     path("dish-types/<int:pk>/update/", DishTypeUpdateView.as_view(), name="dish_type-update"),
     path("dish-types/<int:pk>/delete/", DishTypeDeleteView.as_view(), name="dish_type-delete"),
 ]
-
-]
