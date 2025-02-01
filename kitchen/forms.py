@@ -13,7 +13,10 @@ class DishForm(forms.ModelForm):
 
     class Meta:
         model = Dish
-        fields = "__all__"
+        fields = ['name', 'price', 'description', 'dish_type', 'ingredients']
+        widgets = {
+            'ingredients': forms.CheckboxSelectMultiple,
+        }
 
 
 class DishSearchForm(forms.Form):
