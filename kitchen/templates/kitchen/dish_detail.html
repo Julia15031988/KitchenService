@@ -28,6 +28,17 @@
       </a>
     {% endif %}
   </h1>
+
+
+  <h3>Ingredients:</h3>
+  <ul>
+    {% for ingredient in dish.ingredients.all %}
+        <li>{{ ingredient.name }} - {{ ingredient.quantity }} ({{ ingredient.description }})</li>
+    {% empty %}
+        <li>No ingredients available for this dish.</li>
+    {% endfor %}
+  </ul>
+
   <hr>
   <ul>
     {% for cook in dish.cooks.all %}
