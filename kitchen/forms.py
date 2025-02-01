@@ -64,3 +64,4 @@ class DishTypeSearchForm(forms.Form):
         )
     )
 
+
