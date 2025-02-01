@@ -19,6 +19,10 @@
         <li>
           <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">{{ dish.id }}</a>
           {{ dish.name }} ({{ dish.dish_type.name }})
+
+          <a href="{% url 'kitchen:dish_type-detail' pk=dish.dish_type.id %}">
+            {{ dish.name }}
+          </a>
         </li>
       {% endfor %}
     </ul>
@@ -26,3 +30,4 @@
     <p>There are no dish in menu</p>
   {% endif %}
 {% endblock %}
+

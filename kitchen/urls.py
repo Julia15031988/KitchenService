@@ -15,7 +15,8 @@ from .views import(
     DishTypeCreateView,
     DishTypeUpdateView,
     DishTypeDeleteView,
-    toggle_dish_assign
+    toggle_dish_assign,
+    DishTypeDetailView,
 )
 
 app_name = "kitchen"
@@ -44,6 +45,7 @@ urlpatterns = [
     path("dish-types/create/", DishTypeCreateView.as_view(), name="dish_type-create"),
     path("dish-types/<int:pk>/update/", DishTypeUpdateView.as_view(), name="dish_type-update"),
     path("dish-types/<int:pk>/delete/", DishTypeDeleteView.as_view(), name="dish_type-delete"),
-    path("dishes/<int:pk>/toggle/", toggle_dish_assign, name="toggle-dish-assign")
+    path("dishes/<int:pk>/toggle/", toggle_dish_assign, name="toggle-dish-assign"),
+    path("dish-types/<int:pk>/", DishTypeDetailView.as_view(), name="dish_type-detail"),
 
 ]

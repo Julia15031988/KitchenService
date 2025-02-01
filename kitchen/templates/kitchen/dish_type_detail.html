@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ dish_type.name }}</h1>
+
+  <h2>Dishes of this type:</h2>
+  <ul>
+    {% for dish in dish_type.dish_set.all %}
+      <li>
+        <strong>{{ dish.name }}</strong> - ${{ dish.price }}  
+        <p>{{ dish.description }}</p>
+
+        <h3>Cooks:</h3>
+        <ul>
+          {% for cook in dish.cooks.all %}
+            <li>{{ cook.first_name }} {{ cook.last_name }} ({{ cook.username }})</li>
+          {% empty %}
+            <li>No assigned cooks yet.</li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% empty %}
+      <li>No dishes in this category.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'kitchen:dish_type-list' %}">Back to Dish Types</a>
+{% endblock %}

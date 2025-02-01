@@ -147,6 +147,7 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = DishType
     success_url = reverse_lazy("kitchen:dish_type-list")
 
+
 @login_required
 def toggle_dish_assign(request, pk):
     dish = get_object_or_404(Dish, pk=pk)
@@ -155,3 +156,9 @@ def toggle_dish_assign(request, pk):
     else:
         dish.cooks.add(request.user)
     return redirect(reverse("kitchen:dish-detail", args=[pk]))
+
+
+class DishTypeDetailView(LoginRequiredMixin, generic.DetailView):
+    model = DishType
+    template_name = "kitchen/dish_type_detail.html"
+    context_object_name = "dish_type"
