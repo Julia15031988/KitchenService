@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>{{ dish_type.name }}</h1>
+  <h1>{{ dish.name }}</h1>
 
-  <h2>Dishes of this type:</h2>
+  <h2>Dish Detail:</h2>
   <ul>
     {% for dish in dish_type.dish_set.all %}
       <li>
         <strong>{{ dish.name }}</strong> - ${{ dish.price }}  
         <p>{{ dish.description }}</p>
+
+
+  <h3>Ingredients:</h3>
+  <ul>
+    {% for ingredient in dish.ingredients.all %}
+        <li>{{ ingredient.name }} - {{ ingredient.quantity }} ({{ ingredient.description }})</li>
+    {% empty %}
+        <li>No ingredients available for this dish.</li>
+    {% endfor %}
+  </ul>
+
 
         <h3>Cooks:</h3>
         <ul>
