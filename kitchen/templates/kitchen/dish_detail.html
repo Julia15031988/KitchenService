@@ -11,38 +11,47 @@
       Update
     </a>
   </h1>
-  <p>Dish Type:
 
-    {{ dish.dish_type.name }}</p>
+  <p><strong>Dish Type:</strong> {{ dish.dish_type.name }}</p>
 
-  <h1>
-    Cooks
-
-    {% if dish in user.dishes.all %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
-        Remove me from this dish
-      </a>
-    {% else %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
-        Assign me to this dish
-      </a>
-    {% endif %}
-  </h1>
-
+  <h2>Cooks</h2>
+  {% if dish in user.dishes.all %}
+    <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
+      Remove me from this dish
+    </a>
+  {% else %}
+    <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
+      Assign me to this dish
+    </a>
+  {% endif %}
 
   <h3>Ingredients:</h3>
-  <ul>
+  <ul class="list-group">
     {% for ingredient in dish.ingredients.all %}
-        <li>{{ ingredient.name }} - {{ ingredient.quantity }} ({{ ingredient.description }})</li>
+        <li class="list-group-item">
+            <strong>{{ ingredient.name }}</strong> - {{ ingredient.quantity }} ({{ ingredient.description }})
+        </li>
     {% empty %}
-        <li>No ingredients available for this dish.</li>
+        <li class="list-group-item">No ingredients available for this dish.</li>
     {% endfor %}
   </ul>
 
-  <hr>
-  <ul>
+  <h3>Add New Ingredient:</h3>
+  <form method="POST" action="{% url 'kitchen:add_ingredients_to_dish' pk=dish.pk %}">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- Виведення форми -->
+    <button type="submit">Add Ingredient</button>
+  </form>
+
+  <h3>Assigned Cooks:</h3>
+  <ul class="list-group">
     {% for cook in dish.cooks.all %}
-      <li>{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</li>
+      <li class="list-group-item">{{ cook.username }} ({{ cook.first_name }} {{ cook.last_name }})</li>
+    {% empty %}
+      <li class="list-group-item">No cooks assigned to this dish.</li>
     {% endfor %}
   </ul>
+
+  <a href="{% url 'kitchen:dish_type-list' %}" class="btn btn-primary mt-3">Back to Dish Types</a>
+
 {% endblock %}

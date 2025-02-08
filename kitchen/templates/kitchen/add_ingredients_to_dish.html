@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Add Ingredient to {{ dish.name }}</h1>
+
+  <form method="POST" action="{% url 'kitchen:add_ingredients_to_dish' pk=dish.pk %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Ingredient</button>
+  </form>
+
+  <a href="{% url 'kitchen:dish-detail' pk=dish.pk %}">Back to Dish</a>
+
+{% endblock %}
+

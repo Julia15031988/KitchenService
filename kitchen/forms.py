@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from kitchen.models import Dish, Cook, DishType
+from kitchen.models import Dish, Cook, DishType, Ingredient
 
 
 class DishForm(forms.ModelForm):
@@ -68,3 +68,13 @@ class DishTypeSearchForm(forms.Form):
     )
 
 
+class IngredientForm(forms.ModelForm):
+    ingredients = forms.ModelMultipleChoiceField(
+        queryset=Ingredient.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Ingredient
+        fields = ['name', 'description', 'quantity', 'price']

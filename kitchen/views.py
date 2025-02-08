@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Cook, DishType, Dish
-from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm
+from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm, IngredientForm
 
 
 def index(request):
@@ -52,6 +52,28 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
 class DishDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dish
+    template_name = "kitchen/dish_detail.html"
+    context_object_name = "dish"
+    form_class = IngredientForm
+
+    def get_success_url(self):
+        return reverse("dish_detail", kwargs={"pk": self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ingredient_form'] = IngredientForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        dish = self.get_object()
+        form = IngredientForm(request.POST)
+
+        if form.is_valid():
+            ingredients = form.cleaned_data['ingredients']
+            dish.ingredients.set(ingredients)  # Додаємо інгредієнти до страви
+            return redirect('dish_detail', pk=dish.pk)
+
+        return self.render_to_response({'ingredient_form': form})
 
 
 class DishCreateView(LoginRequiredMixin, generic.CreateView):
@@ -162,3 +184,24 @@ class DishTypeDetailView(LoginRequiredMixin, generic.DetailView):
     model = DishType
     template_name = "kitchen/dish_type_detail.html"
     context_object_name = "dish_type"
+
+
+class AddIngredientView(LoginRequiredMixin, generic.CreateView):
+    template_name = "kitchen/dish_detail.html"
+
+    def get(self, request, pk):
+        dish = get_object_or_404(Dish, pk=pk)
+        form = IngredientForm()
+        return render(request, self.template_name, {"dish": dish, "form": form})
+
+    def post(self, request, pk):
+        dish = get_object_or_404(Dish, pk=pk)
+        form = IngredientForm(request.POST)
+
+        if form.is_valid():
+            ingredient = form.save()
+            dish.ingredients.add(ingredient)  # Додаємо інгредієнт до страви
+            return redirect("kitchen:dish-detail", pk=dish.pk)
+
+        return render(request, self.template_name, {"dish": dish, "form": form})
+
