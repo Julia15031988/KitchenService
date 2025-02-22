@@ -6,16 +6,16 @@
     <div class="page-header min-vh-80" style="background-image: url('{{ ASSETS_ROOT }}/img/bg.120.jpg'); background-size: cover; background-position: center; padding-top: 50px;">
       <h1 class="text-center text-white mb-3" style="font-size: 2.5rem; color: red; z-index: 5; position: relative; margin-bottom: 1px;">COOK LIST</h1>        <!-- Контейнер для контенту -->
         <div class="container d-flex justify-content-center align-items-center min-vh-100">
-            <!-- Карта для таблиці з біло-рожевим фоном -->
+
             <div class="card bg-white shadow-lg rounded p-4" style="background-color: #f8d7da; opacity: 1; width: 100%; max-width: 1200px; padding: 30px;">
 
-                <!-- Форму пошуку -->
+
                 <form action="" method="get" class="form-inline mb-3">
                     {{ search_form|crispy }}
                     <input class="btn btn-secondary" type="submit" value="🔍">
                 </form>
 
-                <!-- Таблиця з переліком кухарів -->
+
                 {% if cook_list %}
                 <table class="table table-bordered table-striped table-hover">
                     <thead>

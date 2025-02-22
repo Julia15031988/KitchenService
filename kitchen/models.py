@@ -27,13 +27,11 @@ class Cook(AbstractUser):
         return reverse("kitchen:cook-detail", kwargs={"pk": self.pk})
 
 
-
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     quantity = models.CharField(max_length=50, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    #dish = models.ForeignKey(Dish, related_name='ingredients', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -45,7 +43,8 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
     cooks = models.ManyToManyField(Cook, related_name="dishes")
-    ingredients = models.ManyToManyField(Ingredient, related_name="dishes", blank=True)
+    ingredients = models.ManyToManyField(
+        Ingredient, related_name="dishes", blank=True)
 
     class Meta:
         ordering = ["name"]

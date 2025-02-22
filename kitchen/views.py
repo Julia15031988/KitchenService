@@ -1,33 +1,31 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 from django.urls import reverse
 from .models import Cook, DishType, Dish
-from .forms import DishSearchForm, DishForm, CookExperienceUpdateForm, CookCreationForm, CookSearchForm, DishTypeSearchForm, IngredientForm
+from .forms import DishSearchForm, \
+    DishForm, CookExperienceUpdateForm, \
+    CookCreationForm, CookSearchForm, DishTypeSearchForm, \
+    IngredientForm
 
 
-def index(request):
-    """View function for the home page of the site."""
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = "kitchen/index.html"
 
-    num_cooks = Cook.objects.count()
-    num_dishes = Dish.objects.count()
-    num_dish_types = DishType.objects.count()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["num_cooks"] = Cook.objects.count()
+        context["num_dishes"] = Dish.objects.count()
+        context["num_dish_types"] = DishType.objects.count()
 
-    num_visits = request.session.get("num_visits", 0)
-    request.session["num_visits"] = num_visits + 1
+        num_visits = self.request.session.get("num_visits", 0)
+        self.request.session["num_visits"] = num_visits + 1
+        context["num_visits"] = num_visits + 1
 
-    context = {
-        "num_cooks": num_cooks,
-        "num_dishes": num_dishes,
-        "num_dish_types": num_dish_types,
-        "num_visits": num_visits + 1,
-    }
-
-    return render(request, "kitchen/index.html", context=context)
+        return context
 
 
 class DishListView(LoginRequiredMixin, generic.ListView):
@@ -170,14 +168,14 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("kitchen:dish_type-list")
 
 
-@login_required
-def toggle_dish_assign(request, pk):
-    dish = get_object_or_404(Dish, pk=pk)
-    if request.user in dish.cooks.all():
-        dish.cooks.remove(request.user)
-    else:
-        dish.cooks.add(request.user)
-    return redirect(reverse("kitchen:dish-detail", args=[pk]))
+class ToggleDishAssignView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        dish = get_object_or_404(Dish, pk=pk)
+        if request.user in dish.cooks.all():
+            dish.cooks.remove(request.user)
+        else:
+            dish.cooks.add(request.user)
+        return redirect(reverse("kitchen:dish-detail", args=[pk]))
 
 
 class DishTypeDetailView(LoginRequiredMixin, generic.DetailView):
@@ -192,7 +190,9 @@ class AddIngredientView(LoginRequiredMixin, generic.CreateView):
     def get(self, request, pk):
         dish = get_object_or_404(Dish, pk=pk)
         form = IngredientForm()
-        return render(request, self.template_name, {"dish": dish, "form": form})
+        return render(
+            request, self.template_name,
+            {"dish": dish, "form": form})
 
     def post(self, request, pk):
         dish = get_object_or_404(Dish, pk=pk)
@@ -200,8 +200,9 @@ class AddIngredientView(LoginRequiredMixin, generic.CreateView):
 
         if form.is_valid():
             ingredient = form.save()
-            dish.ingredients.add(ingredient)  # Додаємо інгредієнт до страви
+            dish.ingredients.add(ingredient)
             return redirect("kitchen:dish-detail", pk=dish.pk)
 
-        return render(request, self.template_name, {"dish": dish, "form": form})
-
+        return render(
+            request, self.template_name,
+            {"dish": dish, "form": form})
