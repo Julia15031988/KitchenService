@@ -71,7 +71,7 @@ urlpatterns = [
     path(
         "dishes/<int:pk>/toggle/",
         ToggleDishAssignView.as_view(),
-        "toggle-dish-assign"),
+        name="toggle-dish-assign"),
     path(
         "dish-types/<int:pk>/",
         DishTypeDetailView.as_view(),
