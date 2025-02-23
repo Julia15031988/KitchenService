@@ -1,6 +1,19 @@
-__pycache__/
-kitchen/migrations/
-db.sqlite3
+# Системні файли Python
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Віртуальне середовище
 venv/
+
+# Секретні файли
+.env*
+*.sqlite3
+
+# IDE файли
 .idea/
-.env
+
+# Django міграції
+kitchen/migrations/*.pyc
+kitchen/migrations/*.py
+!kitchen/migrations/__init__.py
