@@ -12,9 +12,9 @@ class DishForm(forms.ModelForm):
 
     class Meta:
         model = Dish
-        fields = ['name', 'price', 'description', 'dish_type', 'ingredients']
+        fields = ["name", "price", "description", "dish_type", "ingredients"]
         widgets = {
-            'ingredients': forms.CheckboxSelectMultiple,
+            "ingredients": forms.CheckboxSelectMultiple,
         }
 
 
@@ -23,9 +23,7 @@ class DishSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Search by dish type"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "Search by dish type"}),
     )
 
 
@@ -50,9 +48,7 @@ class CookSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Search by username"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "Search by username"}),
     )
 
 
@@ -61,9 +57,7 @@ class DishTypeSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(
-            attrs={"placeholder": "Search by name"}
-        )
+        widget=forms.TextInput(attrs={"placeholder": "Search by name"}),
     )
 
 
@@ -71,9 +65,9 @@ class IngredientForm(forms.ModelForm):
     ingredients = forms.ModelMultipleChoiceField(
         queryset=Ingredient.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
     )
 
     class Meta:
         model = Ingredient
-        fields = ['name', 'description', 'quantity', 'price']
+        fields = ["name", "description", "quantity", "price"]

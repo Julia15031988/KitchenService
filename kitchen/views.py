@@ -6,10 +6,15 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.urls import reverse
 from .models import Cook, DishType, Dish
-from .forms import DishSearchForm, \
-    DishForm, CookExperienceUpdateForm, \
-    CookCreationForm, CookSearchForm, DishTypeSearchForm, \
-    IngredientForm
+from .forms import (
+    DishSearchForm,
+    DishForm,
+    CookExperienceUpdateForm,
+    CookCreationForm,
+    CookSearchForm,
+    DishTypeSearchForm,
+    IngredientForm,
+)
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -43,8 +48,7 @@ class DishListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = DishSearchForm(self.request.GET)
         if form.is_valid():
-            return self.queryset.filter(
-                name__icontains=form.cleaned_data["name"])
+            return self.queryset.filter(name__icontains=form.cleaned_data["name"])
         return self.queryset
 
 
@@ -59,7 +63,7 @@ class DishDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['ingredient_form'] = IngredientForm()
+        context["ingredient_form"] = IngredientForm()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -67,11 +71,11 @@ class DishDetailView(LoginRequiredMixin, generic.DetailView):
         form = IngredientForm(request.POST)
 
         if form.is_valid():
-            ingredients = form.cleaned_data['ingredients']
+            ingredients = form.cleaned_data["ingredients"]
             dish.ingredients.set(ingredients)  # Додаємо інгредієнти до страви
-            return redirect('dish_detail', pk=dish.pk)
+            return redirect("dish_detail", pk=dish.pk)
 
-        return self.render_to_response({'ingredient_form': form})
+        return self.render_to_response({"ingredient_form": form})
 
 
 class DishCreateView(LoginRequiredMixin, generic.CreateView):
@@ -105,7 +109,8 @@ class CookListView(LoginRequiredMixin, generic.ListView):
         form = CookSearchForm(self.request.GET)
         if form.is_valid():
             return self.queryset.filter(
-                username__icontains=form.cleaned_data["username"])
+                username__icontains=form.cleaned_data["username"]
+            )
         return self.queryset
 
 
@@ -122,7 +127,9 @@ class CookCreateView(LoginRequiredMixin, generic.CreateView):
 class CookExperienceUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Cook
     form_class = CookExperienceUpdateForm
-    success_url = reverse_lazy("kitchen:cook-list",)
+    success_url = reverse_lazy(
+        "kitchen:cook-list",
+    )
 
 
 class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -145,8 +152,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         form = DishTypeSearchForm(self.request.GET)
         if form.is_valid():
-            return self.queryset.filter(
-                name__icontains=form.cleaned_data["name"])
+            return self.queryset.filter(name__icontains=form.cleaned_data["name"])
         return self.queryset
 
 
@@ -190,9 +196,7 @@ class AddIngredientView(LoginRequiredMixin, generic.CreateView):
     def get(self, request, pk):
         dish = get_object_or_404(Dish, pk=pk)
         form = IngredientForm()
-        return render(
-            request, self.template_name,
-            {"dish": dish, "form": form})
+        return render(request, self.template_name, {"dish": dish, "form": form})
 
     def post(self, request, pk):
         dish = get_object_or_404(Dish, pk=pk)
@@ -203,6 +207,4 @@ class AddIngredientView(LoginRequiredMixin, generic.CreateView):
             dish.ingredients.add(ingredient)
             return redirect("kitchen:dish-detail", pk=dish.pk)
 
-        return render(
-            request, self.template_name,
-            {"dish": dish, "form": form})
+        return render(request, self.template_name, {"dish": dish, "form": form})
