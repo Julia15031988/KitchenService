@@ -1,5 +1,5 @@
 # Системні файли Python
-
+**/__pycache__/
 *.pyc
 *.pyo
 
