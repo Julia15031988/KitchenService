@@ -7,6 +7,14 @@ KitchenService is a web application designed to manage restaurant operations eff
 The project is deployed on Render. You can access it here:  
 [KitchenService Live](https://kitchenservice-7.onrender.com/accounts/login/?next=/)
 
+
+## Test Credentials
+
+To help you explore the functionality, you can log in using the following test user credentials:
+
+- **Login:** admin123
+- **Password:** admin123
+
 ## Features
 
 - View, add, update, and delete dishes
