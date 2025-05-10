@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <!-- Фон на всю сторінку -->
+    <div class="page-header min-vh-80" style="background-image: url('{{ ASSETS_ROOT }}/img/bg.100.jpg'); background-size: cover; background-position: center; padding-top: 30px;">
+        <h1 class="text-center text-white mb-2" style="font-size: 2rem; color: red; z-index: 5; position: relative; margin-bottom: 10px;">DISH LIST</h1> <!-- Контейнер для контенту -->
+        <div class="container d-flex justify-content-center align-items-center min-vh-100">
+            <!-- Карта для таблиці з біло-рожевим фоном -->
+            <div class="card bg-white shadow-lg rounded p-3" style="background-color: #f8d7da; opacity: 1; width: 100%; max-width: 1000px; padding: 20px;">
+
+                <!-- Форму пошуку -->
+                <form action="" method="get" class="form-inline mb-3">
+                    {{ search_form|crispy }}
+                    <input class="btn btn-secondary" type="submit" value="🔍">
+                </form>
+
+                <!-- Перелік страв -->
+                {% if dish_list %}
+                <table class="table table-bordered table-hover" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <thead style="background-color: #f1f1f1; text-align: center; border-radius: 10px 10px 0 0;">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Dish Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dish in dish_list %}
+                        <tr style="transition: background-color 0.3s ease;">
+                            <td style="text-align: center;">
+                                <a href="{% url 'kitchen:dish-detail' pk=dish.id %}" style="color: #e63946; text-decoration: none; transition: color 0.3s ease;">
+                                    {{ dish.id }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'kitchen:dish-detail' pk=dish.id %}" style="color: #e63946; text-decoration: none; transition: color 0.3s ease;">
+                                    {{ dish.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'kitchen:dish_type-detail' pk=dish.dish_type.id %}" style="color: #e63946; text-decoration: none; transition: color 0.3s ease;">
+                                    {{ dish.dish_type.name }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-white">There are no dishes in the menu.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Стилі для наведення на рядок таблиці -->
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #f8d7da; /* Легкий рожевий колір */
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 12px 15px;
+        }
+        .table a:hover {
+            color: #d00000; /* Темно-червоний при наведенні */
+        }
+    </style>
+{% endblock %}
+
